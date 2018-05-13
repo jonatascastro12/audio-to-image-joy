@@ -18,6 +18,8 @@ import {
 } from '@angular/material';
 import {MyDashboardComponent} from './my-dashboard/my-dashboard.component';
 import {FormsModule} from '@angular/forms';
+import {ServerService} from './services/server.service';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import {FormsModule} from '@angular/forms';
 
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     LayoutModule,
     MatInputModule,
@@ -41,7 +44,9 @@ import {FormsModule} from '@angular/forms';
     MatCardModule,
     MatMenuModule
   ],
-  providers: [],
+  providers: [
+    ServerService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
