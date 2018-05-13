@@ -1,0 +1,68 @@
+<div class="grid-container">
+  <h1 class="mat-h1">SlideFromAudio <mat-icon>slideshow</mat-icon></h1>
+  <mat-grid-list cols="4" rowHeight="200px">
+    <mat-grid-tile [colspan]="2" [rowspan]="2">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Audio
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>
+            <form class="example-form" (ngSubmit)="startStream(getAudioServerUrl(videoUrl))">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Youtube Video URL" name="videoUrl" [(ngModel)]="videoUrl">
+                <div class="" *ngIf="videoUrl">
+                  <!--<audio controls #audioPlayer>-->
+                  <!--<source [src]="getAudioServerUrl(videoUrl)" type="audio/mpeg">-->
+                  <!--</audio>-->
+                </div>
+              </mat-form-field>
+
+              <div class="button-row">
+                <button *ngIf="translateUrl(videoUrl) && played" mat-raised-button (click)="stopStream()" type="button">
+                  Stop
+                </button>
+                <button *ngIf="translateUrl(videoUrl)" mat-raised-button color="primary"
+                        type="submit">Play
+                </button>
+              </div>
+            </form>
+          </div>
+          <br>
+          <div>
+            {{subtitle}}
+          </div>
+
+
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2" [rowspan]="4">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Slideshow
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>
+            {{lastSubject}}
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
