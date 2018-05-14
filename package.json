@@ -24,6 +24,7 @@
     "@angular/router": "^6.0.0",
     "@types/watson-developer-cloud": "^2.40.0",
     "@types/webspeechapi": "0.0.29",
+    "animate.css": "^3.6.1",
     "core-js": "^2.5.4",
     "rxjs": "^6.0.0",
     "watson-speech": "^0.34.1",

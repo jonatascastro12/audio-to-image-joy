@@ -14,7 +14,7 @@ import {
   MatGridListModule,
   MatCardModule,
   MatMenuModule,
-  MatInputModule
+  MatInputModule, MatSelectModule
 } from '@angular/material';
 import {MyDashboardComponent} from './my-dashboard/my-dashboard.component';
 import {FormsModule} from '@angular/forms';
@@ -34,6 +34,7 @@ import {HttpClientModule} from '@angular/common/http';
     HttpClientModule,
     BrowserAnimationsModule,
     LayoutModule,
+    MatSelectModule,
     MatInputModule,
     MatToolbarModule,
     MatButtonModule,

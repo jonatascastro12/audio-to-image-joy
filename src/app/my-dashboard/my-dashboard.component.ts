@@ -16,7 +16,7 @@ export class MyDashboardComponent implements OnInit {
     {title: 'Card 4', cols: 1, rows: 1}
   ];
 
-  videoUrl: string;
+  videoUrl: string = 'https://www.youtube.com/watch?v=m-_W1FaavsU';
   yasUrl = 'http://localhost:3000/yas/';
 
   iteration = 0;
@@ -27,12 +27,19 @@ export class MyDashboardComponent implements OnInit {
   consolidated_results = [];
 
   lastSubject: string;
+  nlp_result: any;
 
   subtitle: string;
 
   played = false;
 
   stream: any;
+
+  backend = 'google';
+  backends = [
+    {value: 'watson', format: 'mp3', text: 'IBM Watson'},
+    {value: 'google', format: 'flac', text: 'Google Cloud Platform'}
+  ];
 
   constructor(private server: ServerService) {
 
@@ -52,10 +59,62 @@ export class MyDashboardComponent implements OnInit {
   }
 
   getAudioServerUrl(url) {
-    return this.yasUrl + this.translateUrl(url);
+    return this.yasUrl + (this.backend === 'google' ? 'flac/' : '') + this.translateUrl(url);
   }
 
   startStream(url) {
+    console.log('start Stream', this.backend, url);
+    switch (this.backend) {
+      case 'watson':
+        return this.startStreamWatson(url);
+      case 'google':
+        return this.startStreamGoogle(url.replace(this.yasUrl + 'flac/', ''));
+      default:
+        return this.startStreamWatson(url);
+    }
+  }
+
+  stopStream() {
+    switch (this.backend) {
+      case 'watson':
+        return this.stopStreamWatson();
+      case 'google':
+        return this.stopStreamGoogle();
+      default:
+        return this.stopStreamWatson();
+    }
+  }
+
+  startStreamGoogle(url) {
+    const socket = this.server.connectGoogleSpeechStream(url);
+
+
+    socket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.results[0]) {
+          const text = data.results[0].alternatives[0].transcript;
+
+          this.subtitle = text.substr(text.length - 300);
+          if (data.results[0] && data.results[0].alternatives[0].confidence > 0) {
+            this.lastSubject = text;
+            this.server.getGoogleNLPImagesFromText(this.lastSubject).subscribe((nlp) => {
+              this.nlp_result = nlp;
+            });
+          }
+        }
+      } catch (e) {
+        console.error('error on message', e);
+      }
+
+    };
+  }
+
+  stopStreamGoogle() {
+
+  }
+
+  startStreamWatson(url) {
     this.played = true;
     this.server.getToken().subscribe((res) => {
       this.stream = WatsonSpeech.SpeechToText.recognizeFile({
@@ -95,14 +154,16 @@ export class MyDashboardComponent implements OnInit {
           this.lastSubject = this.consolidated_results.map(r => r.results[0].alternatives[0].transcript).join(' ');
           this.consolidated_results = [];
 
-          //TODO: CHAMA NLP
+          this.server.getGoogleNLPImagesFromText(this.lastSubject).subscribe((nlp) => {
+            this.nlp_result = nlp;
+          });
         }
 
       });
     });
   }
 
-  stopStream() {
+  stopStreamWatson() {
     this.stream.stop();
     this.stream.recognizeStream.socket.close();
     this.stream.recognizeStream.finish();

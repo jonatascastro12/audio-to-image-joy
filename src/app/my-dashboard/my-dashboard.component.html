@@ -1,19 +1,29 @@
 <div class="grid-container">
-  <h1 class="mat-h1">SlideFromAudio <mat-icon>slideshow</mat-icon></h1>
+  <h1 class="mat-h1">SlideFromAudio
+    <mat-icon>slideshow</mat-icon>
+  </h1>
   <mat-grid-list cols="4" rowHeight="200px">
     <mat-grid-tile [colspan]="2" [rowspan]="2">
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
-            Audio
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
+            Backend & Youtube Source
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
           <div>
             <form class="example-form" (ngSubmit)="startStream(getAudioServerUrl(videoUrl))">
+
+              <mat-form-field>
+                <mat-select placeholder="Speech to Text Backend" name="backend" [(ngModel)]="backend">
+                  <mat-option *ngFor="let b of backends" [value]="b.value">
+                    {{ b.text }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <br>
+
               <mat-form-field class="example-full-width">
                 <input matInput placeholder="Youtube Video URL" name="videoUrl" [(ngModel)]="videoUrl">
                 <div class="" *ngIf="videoUrl">
@@ -58,7 +68,24 @@
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
           <div>
-            {{lastSubject}}
+            <small>{{lastSubject}}</small>
+            <h2 *ngIf="nlp_result">{{nlp_result?.keyword}}</h2>
+
+            <mat-grid-list cols="2" rowHeight="200px" class="fadeIn animated" *ngIf="nlp_result">
+              <mat-grid-tile [style.background]="'lightblue'">
+                <img [src]="nlp_result?.image1" width="100%">
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <img [src]="nlp_result?.image2" width="100%">
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <img [src]="nlp_result?.image3" width="100%">
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <img [src]="nlp_result?.image4" width="100%">
+              </mat-grid-tile>
+            </mat-grid-list>
+
 
           </div>
         </mat-card-content>
