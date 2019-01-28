@@ -1,7 +1,7 @@
 # Audio To Image Joy
 
 Angular client of application that auto generate slides from speech. (https://github.com/jonatascastro12/audio-to-image-server)
-It's made to test Google Voice Recognition and NLP.  
+It's made to test Google and Watson IA cloud services.
 It uses Angular 6.0.
 
 ## Quick Start
