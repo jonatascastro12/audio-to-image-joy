@@ -8,3 +8,5 @@ It uses Angular 6.0.
 - `npm install -g angular-cli`  
 - `npm install`  
 - Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`.
+
+**This project is no longer maintained.**
